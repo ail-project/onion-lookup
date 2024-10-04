@@ -1,0 +1,5 @@
+aiofiles
+jinja2
+starlette
+uvicorn
+valkey

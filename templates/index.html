@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main role="main">
+
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">onion-lookup</h1>
+      <p>onion-lookup is a service for checking the existence of Tor hidden services and retrieving their associated metadata. onion-lookup relies on an private <a href="https://www.ail-project.org/">AIL</a> instance to obtain the metadata.</p>
+       <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" name="lookup" type="text" placeholder="Lookup" aria-label="Lookup">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Lookup</button>
+       </form>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h2>API</h2>
+        <p>An OpenAPI is also available to query onion-lookup.</p>
+        <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+      </div>
+    </div>
+
+    <hr>
+
+  </div> <!-- /container -->
+
+</main>
+{% endblock %}
+
