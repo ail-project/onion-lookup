@@ -1,3 +1,5 @@
 [DEFAULT]
 ail_url = https://127.0.0.1:7000
 ail_apikey = YOURAILAPIKEY 
+valkey_host = 127.0.0.1
+valkey_port = 6379
