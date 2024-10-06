@@ -1,4 +1,5 @@
 aiofiles
+apiman
 jinja2
 requests
 starlette
