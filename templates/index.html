@@ -8,10 +8,42 @@
       <h1 class="display-3">onion-lookup</h1>
       <p>onion-lookup is a service for checking the existence of Tor hidden services and retrieving their associated metadata. onion-lookup relies on an private <a href="https://www.ail-project.org/">AIL</a> instance to obtain the metadata.</p>
        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" name="lookup" type="text" placeholder="Lookup" aria-label="Lookup">
+          <input class="form-control input-lg" name="lookup" type="text" placeholder="archiveiya74codqgiixo33q62qlrqtkgmcitqx5u2oeqnmn5bpcbiyd.onion" aria-label="Lookup" size="80">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Lookup</button>
        </form>
-
+       {% if onion %}
+       <div class="card" style="width: 80rem;">
+        <div class="card-body">
+           <h5 class="card-title">{{ onion }}</h5>
+           <h6 class="card-subtitle mb-2 text-light">
+           {% for tag in onion_meta['tags'] %}
+	   <span class="badge bg-primary">{{ tag }}</span>
+	   {% endfor %}
+	   </h6>
+	   <p class="card-text">Languages:
+	   {% for lang in onion_meta['languages'] %}
+	   <span class="badge bg-secondary text-light">{{ lang }}</span>
+	   {% endfor %}
+           </p>
+	   <p class="card-text"><b>Known titles of the Tor onion addresses</b>:</p>
+	   <ul class="list-group list-group-flush">
+	   {% for title in onion_meta['titles'] %}
+	          <li class="list-group-item">{{ title }}</li> 
+           {% endfor %}
+	   </ul>
+	   <p class="card-text"><b>Temporal information</b>:</p>
+	   <ul class="list-group list-group-flush">
+		   <li class="list-group-item">First seen: {{ onion_meta['first_seen'] }}</li>
+		   <li class="list-group-item">Last seen: {{ onion_meta['last_seen'] }}</li>
+           <ul>
+         </div>
+        </div>
+       {% endif %}
+       {% if error %}
+       <div class="alert alert-warning" role="alert">
+           Incorrect format, an onion address is composed of the id and the onion suffix.
+       </div>
+       {% endif %}
     </div>
   </div>
 
