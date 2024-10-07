@@ -155,7 +155,7 @@ exception_handlers = {
     500: server_error
 }
 
-app = Starlette(debug=True, routes=routes, exception_handlers=exception_handlers)
+app = Starlette(debug=False, routes=routes, exception_handlers=exception_handlers)
 app.add_middleware(HttpUrlRedirectMiddleware)
 apiman.init_app(app)
 
