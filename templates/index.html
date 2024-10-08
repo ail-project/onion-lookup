@@ -15,23 +15,23 @@
        <div class="card" style="width: 80rem;">
         <div class="card-body">
            <h5 class="card-title">{{ onion }}</h5>
-           <h6 class="card-subtitle mb-2 text-light">
+           <h6 class="card-subtitle mb-2 text-light" data-toggle="tooltip" data-placement="right" title="Labels set on Tor onion address set when analysing Tor content"><i class="bi bi-info-circle text-dark"></i>
            {% for tag in onion_meta['tags'] %}
 	   <span class="badge bg-primary">{{ tag }}</span>
 	   {% endfor %}
 	   </h6>
-	   <p class="card-text">Languages:
+	   <p class="card-text" data-toggle="tooltip" data-placement="right" title="List of languages detected on the onion address">Languages <i class="bi bi-info-circle"></i> :
 	   {% for lang in onion_meta['languages'] %}
 	   <span class="badge bg-secondary text-light">{{ lang }}</span>
 	   {% endfor %}
            </p>
-	   <p class="card-text"><b>Known titles of the Tor onion addresses</b>:</p>
+	   <p class="card-text" data-toggle="tooltip" data-placement="right" title="List of titles seen when crawling the onion address"><b>Known titles of the Tor onion addresses</b> <i class="bi bi-info-circle"></i> :</p>
 	   <ul class="list-group list-group-flush">
 	   {% for title in onion_meta['titles'] %}
 	          <li class="list-group-item">{{ title }}</li> 
            {% endfor %}
 	   </ul>
-	   <p class="card-text"><b>Temporal information</b>:</p>
+	   <p class="card-text" data-toggle="tooltip" data-placement="right" title="When the onion address was first seen and last seen"><b>Temporal information</b> <i class="bi bi-info-circle"></i> :</p>
 	   <ul class="list-group list-group-flush">
 		   <li class="list-group-item">First seen: {{ onion_meta['first_seen'] }}</li>
 		   <li class="list-group-item">Last seen: {{ onion_meta['last_seen'] }}</li>
