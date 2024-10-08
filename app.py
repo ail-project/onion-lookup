@@ -59,6 +59,8 @@ class HttpUrlRedirectMiddleware:
             await self.app(scope, receive, send)
 
 def extract_onion_from_url(url):
+    if not url.startswith('http'):
+        url = f'http://{url}'
     url = urlparse(url)
     domain = url.netloc.split(':', 1)[0].split('.')
     if len(domain) > 1:
