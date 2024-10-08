@@ -15,7 +15,7 @@
        <div class="card" style="width: 80rem;">
         <div class="card-body">
            <h5 class="card-title">{{ onion }}</h5>
-           <h6 class="card-subtitle mb-2 text-light" data-toggle="tooltip" data-placement="right" title="Labels set on Tor onion address set when analysing Tor content"><i class="bi bi-info-circle text-dark"></i>
+           <h6 class="card-subtitle mb-2 text-light" data-toggle="tooltip" data-placement="right" title="Labels using MISP taxonomies set on Tor onion address when analysing Tor content on each page"><i class="bi bi-info-circle text-dark"></i>
            {% for tag in onion_meta['tags'] %}
 	   <span class="badge bg-primary">{{ tag }}</span>
 	   {% endfor %}
