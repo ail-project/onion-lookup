@@ -10,10 +10,15 @@ from starlette.templating import Jinja2Templates
 from starlette.responses import JSONResponse, RedirectResponse
 from starlette.datastructures import URL
 from starlette.types import ASGIApp, Receive, Scope, Send
-repeated_quotes = re.compile(r'//+') # handling multiple // in url
+repeated_quotes = re.compile(r'//+')  # handling multiple // in url
+from urllib.parse import urlparse
 import sys
 import uvicorn
 import valkey
+
+# disable requests certificate warning
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 templates = Jinja2Templates(directory='templates')
 
@@ -35,23 +40,31 @@ if not cache.ping():
 
 
 class HttpUrlRedirectMiddleware:
-  """
-  This http middleware redirects urls with repeated slashes to the cleaned up
-  versions of the urls - from GitHub issue from Starlette project
-  """
+    """
+    This http middleware redirects urls with repeated slashes to the cleaned up
+    versions of the urls - from GitHub issue from Starlette project
+    """
 
-  def __init__(self, app: ASGIApp) -> None:
-    self.app = app
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
 
-  async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
 
-    if scope["type"] == "http" and repeated_quotes.search(URL(scope=scope).path):
-      url = URL(scope=scope)
-      url = url.replace(path=repeated_quotes.sub('/', url.path))
-      response = RedirectResponse(url, status_code=307)
-      await response(scope, receive, send)
+        if scope["type"] == "http" and repeated_quotes.search(URL(scope=scope).path):
+            url = URL(scope=scope)
+            url = url.replace(path=repeated_quotes.sub('/', url.path))
+            response = RedirectResponse(url, status_code=307)
+            await response(scope, receive, send)
+        else:
+            await self.app(scope, receive, send)
+
+def extract_onion_from_url(url):
+    url = urlparse(url)
+    domain = url.netloc.split(':', 1)[0].split('.')
+    if len(domain) > 1:
+        return f'{domain[-2]}.{domain[-1]}'
     else:
-      await self.app(scope, receive, send)
+        return None
 
 def check_onion(onion=None):
     # We only support onion_v3 and automatically append dot onion if missing
@@ -80,7 +93,8 @@ async def homepage(request):
     template = "index.html"
     context = {"request": request}
     if 'lookup' in request.query_params:
-        onion = check_onion(onion=request.query_params['lookup'].lower())
+        onion = extract_onion_from_url(request.query_params['lookup'].lower())
+        onion = check_onion(onion=onion)
         if onion is not False:
             context['onion'] = onion
             onion_meta = query_onion(onion=onion)
@@ -105,7 +119,8 @@ async def homepage(request):
         description: OK
     """)
 async def lookup(request):
-    onion = check_onion(onion=request.path_params['onion'].lower())
+    onion = extract_onion_from_url(request.path_params['onion'].lower())
+    onion = check_onion(onion=onion)
     keycache = f'onion-lookup:{onion}'
     if onion:
         onion_response = check_onion(onion=onion)
