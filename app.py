@@ -116,6 +116,8 @@ async def homepage(request):
     - name: onion 
       in: path 
       required: True
+      schema:
+        type: string
     responses:
       "200":
         description: OK
