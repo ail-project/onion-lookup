@@ -3,5 +3,6 @@ info:
   title: 'onion-lookup'
   version: '0.1'
   description: 'API manual for onion-lookup'
-servers:
-  url: "https://onion.ail-project.org"
+  servers:
+    - url: https://onion.ail-project.org
+
