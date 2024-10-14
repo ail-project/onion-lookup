@@ -11,7 +11,7 @@ from starlette.responses import JSONResponse, RedirectResponse
 from starlette.datastructures import URL
 from starlette.types import ASGIApp, Receive, Scope, Send
 repeated_quotes = re.compile(r'//+')  # handling multiple // in url
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote
 import sys
 import uvicorn
 import valkey
@@ -61,10 +61,12 @@ class HttpUrlRedirectMiddleware:
 def extract_onion_from_url(url):
     if not url.startswith('http'):
         url = f'http://{url}'
+    url = unquote(url)
     url = urlparse(url)
     domain = url.netloc.split(':', 1)[0].split('.')
     if len(domain) > 1:
-        return f'{domain[-2]}.{domain[-1]}'
+        extracted_onion = f'{domain[-2]}.{domain[-1]}'
+        return extracted_onion
     else:
         return None
 
