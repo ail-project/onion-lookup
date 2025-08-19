@@ -111,7 +111,13 @@ def query_onion(onion=None):
     )
     if r.status_code != 200:
         return False
-    cache.set(keycache, r.text, ex=3600)
+    meta = json.loads(r.text)
+    # Temporary fix until back-end supports the new taxonomy
+    old_tag = 'dark-web:topic="pornography-child-exploitation"'
+    new_tag = 'dark-web:topic="child-sexual-abuse-material"'
+    meta['tags'] = [new_tag if x == old_tag else x for x in meta['tags']]
+    raw_resp = json.dumps(meta)
+    cache.set(keycache, raw_resp, ex=3600)
     stats_onion(onion=onion, typeo="local")
     return json.loads(cache.get(keycache))
 
@@ -161,7 +167,6 @@ async def lookup(request):
                 return JSONResponse(onion_meta)
         else:
             return JSONResponse({"error": "Incorrect onion format"})
-
     return JSONResponse({})
 
 
