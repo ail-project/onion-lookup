@@ -113,11 +113,14 @@ def query_onion(onion=None):
         return False
     meta = json.loads(r.text)
     # Temporary fix until back-end supports the new taxonomy
-    old_tag = 'dark-web:topic="pornography-child-exploitation"'
-    new_tag = 'dark-web:topic="child-sexual-abuse-material"'
-    meta['tags'] = [new_tag if x == old_tag else x for x in meta['tags']]
-    raw_resp = json.dumps(meta)
-    cache.set(keycache, raw_resp, ex=3600)
+    if 'tags' in meta:
+        old_tag = 'dark-web:topic="pornography-child-exploitation"'
+        new_tag = 'dark-web:topic="child-sexual-abuse-material"'
+        meta['tags'] = [new_tag if x == old_tag else x for x in meta['tags']]
+        raw_resp = json.dumps(meta)
+        cache.set(keycache, raw_resp, ex=3600)
+    else:
+        cache.set(keycache, r.text, ex=3600)
     stats_onion(onion=onion, typeo="local")
     return json.loads(cache.get(keycache))
 
