@@ -64,6 +64,12 @@ class HttpUrlRedirectMiddleware:
 
 
 def extract_onion_from_url(url):
+    words = domain.split()
+    if len(words) > 1:
+        for word in words:
+            if '.onion' in word:
+                url = word
+
     if not url.startswith('http'):
         url = f'http://{url}'
     url = unquote(url)
