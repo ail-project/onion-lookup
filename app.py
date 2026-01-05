@@ -64,7 +64,7 @@ class HttpUrlRedirectMiddleware:
 
 
 def extract_onion_from_url(url):
-    words = domain.split()
+    words = url.split()
     if len(words) > 1:
         for word in words:
             if '.onion' in word:
